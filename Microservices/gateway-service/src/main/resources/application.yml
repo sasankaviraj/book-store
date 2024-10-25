@@ -1,0 +1,46 @@
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - name: SetRequestHeader
+          args:
+            name: Authorization
+            value: "${Authorization}"  # Forwards the Authorization header from incoming requests
+      discovery:
+        locator:
+          enabled: true   # Enables service discovery for routing
+          lower-case-service-id: true
+      routes:
+        - id: author-service
+          uri: lb://author-service  # Use service discovery load balancer
+          predicates:
+            - Path=/api/author/**
+          filters:
+            - StripPrefix=2
+
+        - id: book-service
+          uri: lb://book-service  # Use service discovery load balancer
+          predicates:
+            - Path=/api/book/**
+          filters:
+            - StripPrefix=2
+
+  application:
+    name: gateway-service
+
+  main:
+    web-application-type: reactive
+    allow-bean-definition-overriding: true
+
+globalcors:
+  corsConfigurations:
+    '[/**]':
+      allowedOrigins: "http://localhost:4200/"
+      allowedHeaders:
+        - content-type
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE

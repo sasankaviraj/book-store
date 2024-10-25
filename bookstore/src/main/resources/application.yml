@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: bookstore
+  datasource:
+    url: jdbc:mysql://localhost:3306/bookstore?createDatabaseIfNotExist=true
+    username: root
+    password: 1111
+    driver-class-name: com.mysql.jdbc.Driver
+  flyway:
+    enabled: false
+    baseline-on-migrate: false
+    locations: classpath:db/migration
+  jpa:
+    hibernate:
+      ddl-auto: update
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.sasanka.bookstore: ERROR
+
+jwt:
+  secret: project_secret_key
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
